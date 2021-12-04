@@ -85,3 +85,7 @@ def lambda_handler(event, context):
     }
 
 ```
+
+
+### Code Deploy Lifecycle Event Hooks in CodeDeploy
+![image](https://user-images.githubusercontent.com/46012524/144706571-a9c4f7e3-c47d-43af-a4b9-327b3daf0734.png)
