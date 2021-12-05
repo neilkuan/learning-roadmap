@@ -97,7 +97,8 @@ In order for CodeDeploy to deploy your application revision to new EC2 instances
 
 #### After CodeDeploy adds the lifecycle hook, how is it used?
 ![image](https://user-images.githubusercontent.com/46012524/144707006-3d2110c6-315a-4d09-a298-80de423742fd.png)
-After the lifecycle hook is installed, it is used during scale-out events. A scale-out event unfolds as follows:
+
+#### After the lifecycle hook is installed, it is used during scale-out events. A scale-out event unfolds as follows:
 
 1. The Auto Scaling service (or simply, Auto Scaling) determines that a scale-out event needs to occur, and contacts the EC2 service to launch a new EC2 instance.
 
