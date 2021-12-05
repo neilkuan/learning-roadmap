@@ -121,3 +121,41 @@ In order for CodeDeploy to deploy your application revision to new EC2 instances
 
 
 
+### AWS Elastic Beanstal's model?
+- Applications have many environments, environments have many deployments.
+
+### Dynamodb
+Q. What are the Global Secondary Key features of DynamoDB?
+A. The partition key and sort key can be different from the table.
+
+Q. What is true of the Local Secondary Key attributes in DynamoDB?
+A. Only the sort key can be different from the table.
+
+### Cloudformation
+Q. How should you get near-real-time CloudFormation stack status updates in a continuous delivery system?
+A. Use NotificationARNs.member.N when making a CreateStack call to push stack events into SNS in nearly real-time.
+
+Q. Which stack state in AWS CloudFormation rejects UpdateStack calls?
+A. When a stack is in the UPDATE_ROLLBACK_FAILED state, you can continue rolling it back to return it to a working state (to
+UPDATE_ROLLBACK_COMPLETE). You cannot update a stack that is in the UPDATE_ROLLBACK_FAILED state. However, if you can continue to roll it back, you can return the stack to its original settings and try to update it again.
+
+Q. Which of the following is not an AWS CloudFormation Pseudo Parameter?
+A. This is the complete list of Pseudo Parameters: AWS::AccountId, AWS::NotificationARNs, AWS::NoValue, AWS::Region, AWS::StackId, AWS::StackName.
+
+
+### IAM
+Q. A user is creating an IAM user policy. Which of the following alternatives corresponds to the policy's valid version?
+A. "Version":"2012-10-17" is now, 2008-10-17 is earilier version.
+
+### AWS OpsWorks
+Q. Which of the following is not an instance type that may be allocated in a stack tier when considering AWS OpsWorks?
+A. Spot instances
+
+
+### SQS
+Q. By default, how long are messages retained on a SQS queue?
+A. The SQS message retention period is configurable and can be set anywhere from 1 minute to 2 weeks. The default is 4 days and once the message retention limit is reached your messages will be automatically deleted. The option for longer message retention provides greater flexibility to allow for longer intervals between message production and consumption.
+
+### AWS Inspector
+Q. Which command initiates the evaluation process?
+A. aws inspector start-assessment-run --assessment-template-arn<template-arn>
