@@ -125,11 +125,32 @@ In order for CodeDeploy to deploy your application revision to new EC2 instances
 - Applications have many environments, environments have many deployments.
 
 ### Dynamodb
-Q. What are the Global Secondary Key features of DynamoDB?
-A. The partition key and sort key can be different from the table.
+Q. What are the Global Secondary Key features of DynamoDB? 
+A. The partition key and sort key can be different from the table. (分區鍵和排序鍵可以與表不同。)
 
 Q. What is true of the Local Secondary Key attributes in DynamoDB?
-A. Only the sort key can be different from the table.
+A. Only the sort key can be different from the table. (與基表具有相同分區鍵但排序鍵不同的索引)
+
+Local Secondary Indexes (本地二級索引)只能通過 Query API 查詢
+
+#### DynamoDB TTL
+- DynamoDB 生存時間 (TTL) 啟用每個項目的時間戳，以確定何時不再需要項目。
+- 在指定時間戳的日期和時間之後，DynamoDB 從表中刪除項目，而不會消耗任何寫入吞吐量。
+- 從表中刪除的 ite 也以與 DeleteItem 操作相同的方式從任何本地二級索引和全局二級索引中刪除。
+- DynamoDB Stream tracks 追蹤的是系統刪除的動作，不是一般的刪除動作。
+- TTL 擅長用於，儲存 item 後過不久就不需要使用的 item。
+   - 在應用程序中一年不活動後刪除用戶或傳感器數據。
+   - 通過 DynamoDB Streams 和 AWS Lambda 將過期項目存檔到 S3 數據湖。 
+   - 根據合同或監管義務，將敏感數據保留一段時間。 以上三點都適合使用 DynamoDB TTL。
+   - Cloud Watch Event 沒辦法檢查 DynamoDB Event。
+Q. 一家制造公司将所有遥测数据存储在 Amazon DynamoDB 表中。在写入数据后，这些项目不会发生变化。为了降低存储成本，公司必须长期归档所有数据。不过，必须为应用程序提供 60 天以内的数据。
+DevOps 工程师应采取哪些组合步骤以最经济高效地将数据移动到归档存储？ （选择三项。）
+
+A. Table enable TTL, 分配一個包含 60天時間戳的屬性，將該屬性設定為 TTL，Table enable DynamoDB Streams ，創建 Lambda Function 輪詢 DynamoDB Streams，將紀錄寫進 Kinesis Data Firehose stream flow，創建 Kinesis Data Firehose stream ，將Data 寫入S3 bucket 中，並設定S3 生命週期policy，以便在第零天時將data 歸檔到 S3 Glacier Deep Archice。
+
+
+### Service Qutoas and Organizations 集成
+但必須先啟用受信任的訪問，透過Cloud watch alarm and sns 進行告警。
 
 ### Cloudformation
 Q. How should you get near-real-time CloudFormation stack status updates in a continuous delivery system?
