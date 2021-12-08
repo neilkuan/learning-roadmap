@@ -5,6 +5,7 @@
   - 保留的config
   - `.ebxtensions`
   - default vaule. 
+- db init script, use `container_commnad` and `lead_only: true`
 
 
 ### API Gateway Basic Integration Request with lambda.
@@ -172,6 +173,8 @@ A. "Version":"2012-10-17" is now, 2008-10-17 is earilier version.
 Q. Which of the following is not an instance type that may be allocated in a stack tier when considering AWS OpsWorks?
 A. Spot instances
 
+- Create a CloudWatch Event rule for aws.opsworks and set the initiated_by field to auto-healing.
+
 
 ### SQS
 Q. By default, how long are messages retained on a SQS queue?
@@ -180,3 +183,89 @@ A. The SQS message retention period is configurable and can be set anywhere from
 ### AWS Inspector
 Q. Which command initiates the evaluation process?
 A. aws inspector start-assessment-run --assessment-template-arn<template-arn>
+
+### Health Service Notify.
+Create a CloudWatch Event checking for AWS_RISK_CREDENTIALS_EXPOSED in the Health Service. Trigger a Step Function workflow that will issue API calls to IAM, CloudTrail, and SNS to achieve the desired requirements
+<img width="795" alt="截圖 2021-12-08 下午1 37 30" src="https://user-images.githubusercontent.com/46012524/145154309-edc2fbca-551f-4bda-a111-4dadc89f65b8.png">
+
+  
+### Event Bridge
+example Codepipeline Stage change event patterns.
+```bash
+{
+  "source": [
+    "aws.codepipeline"
+  ],
+  "detail-type": [
+    "CodePipeline Pipeline Execution State Change"
+  ],
+  "detail": {
+    "state": [
+      "FAILED"
+    ]
+  }
+}  
+```
+  
+### ECS 
+#### EC2
+- task-role 
+- container instance role (Your Amazon ECS container instances also require logs:CreateLogStream and logs:PutLogEvents permission on the IAM role with which you launch your container instances.)
+
+#### Fargate
+- task-role
+- run-task-role: need log permission.!!!
+
+
+Q. A data analytics company would like to create an automated solution to be alerted in case of EC2 instances being under-utilized for over 24 hours in order to save some costs. The solution should require a manual intervention of an operator validating the assessment before proceeding for instance termination.
+
+A. Enable Trusted Advisor and ensure the check for low-utilized EC2 instances are on. Create a CloudWatch Event that tracks the events created by Trusted Advisor and use a Lambda Function as a target for that event. The Lambda function should trigger an SSM Automation document with a manual approval step. Upon approval, the SSM document proceeds with the instance termination.
+<img width="654" alt="截圖 2021-12-08 下午3 18 38" src="https://user-images.githubusercontent.com/46012524/145165375-25dd6249-ef04-41a9-87a9-353ca62c2001.png">
+  
+- Sample CloudWatch Event for Trusted Advisor check for Low Utilization Amazon EC2 Instances:
+```bash
+{
+  "version": "0",
+  "id": "8dee56b0-b19f-441a-a05c-aa26e583c6c4",
+  "detail-type": "Trusted Advisor Check Item Refresh Notification",
+  "source": "aws.trustedadvisor",
+  "account": "123456789012",
+  "time": "2016-11-13T13:31:34Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "check-name": "Low Utilization Amazon EC2 Instances",
+    "check-item-detail": {
+      "Day 1": "0.0%  0.00MB",
+      "Day 2": "0.0%  0.00MB",
+      "Day 3": "0.0%  0.00MB",
+      "Region/AZ": "eu-central-1a",
+      "Estimated Monthly Savings": "$10.80",
+      "14-Day Average CPU Utilization": "0.0%",
+      "Day 14": "0.0%  0.00MB",
+      "Day 13": "0.0%  0.00MB",
+      "Day 12": "0.0%  0.00MB",
+      "Day 11": "0.0%  0.00MB",
+      "Day 10": "0.0%  0.00MB",
+      "14-Day Average Network I/O": "0.00MB",
+      "Number of Days Low Utilization": "14 days",
+      "Instance Type": "t2.micro",
+      "Instance ID": "i-917b1a5f",
+      "Day 8": "0.0%  0.00MB",
+      "Instance Name": null,
+      "Day 9": "0.0%  0.00MB",
+      "Day 4": "0.0%  0.00MB",
+      "Day 5": "0.0%  0.00MB",
+      "Day 6": "0.0%  0.00MB",
+      "Day 7": "0.0%  0.00MB"
+    },
+    "status": "WARN",
+    "resource_id": "arn:aws:ec2:eu-central-1:123456789012:instance/i-917b1a5f",
+    "uuid": "6ba6d96a-d3dd-4fca-8020-350bbee4719c"
+  }
+}
+```
+  
+  
+  
+  
