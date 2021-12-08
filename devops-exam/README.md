@@ -5,7 +5,7 @@
   - 保留的config
   - `.ebxtensions`
   - default vaule. 
-- db init script, use `container_commnad` and `lead_only: true`
+- db init script, use `container_commnad` and `leader_only: true`
 
 
 ### API Gateway Basic Integration Request with lambda.
